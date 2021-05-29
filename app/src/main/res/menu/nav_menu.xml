@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_study"
+            android:icon="@drawable/ic_user"
+            android:title="@string/study"/>
+        <item
+            android:id="@+id/nav_shop"
+            android:icon="@drawable/ic_user"
+            android:title="@string/shop"/>
+        <item
+            android:id="@+id/nav_record"
+            android:icon="@drawable/ic_user"
+            android:title="我的学习记录"/>
+        <item
+            android:id="@+id/nav_weak_point"
+            android:icon="@drawable/ic_user"
+            android:title="我的错题集"/>
+        <item
+            android:id="@+id/nav_sign_out"
+            android:title="退出登录"
+            android:icon="@drawable/ic_sign_out"/>
+    </group>
+</menu>

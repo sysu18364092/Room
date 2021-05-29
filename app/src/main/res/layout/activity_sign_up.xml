@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_sign_up_username"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center"
+        android:hint="用户名"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/ic_username"
+        android:drawablePadding="5dp"/>
+
+    <EditText
+        android:id="@+id/et_sign_up_password"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:hint="密码"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawablePadding="5dp"/>
+
+    <EditText
+        android:id="@+id/et_sign_up_password_confirm"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:hint="确认密码"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawablePadding="5dp"/>
+    <EditText
+        android:id="@+id/et_sign_up_mail"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:hint="邮箱"
+        android:singleLine="true"
+        android:drawableLeft="@drawable/ic_mail"
+        android:drawablePadding="5dp"/>
+    <Button
+        android:id="@+id/btn_sign_up_confirm"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:text="确认注册"
+        android:textSize="24sp"/>
+
+
+
+
+</LinearLayout>
