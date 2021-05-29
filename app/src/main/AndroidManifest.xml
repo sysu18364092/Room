@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".shop.ShopActivity"></activity>
+        <activity android:name=".study.TestActivity"></activity>
+        <activity android:name=".shop.ShopActivity" />
         <activity android:name=".study.WeakPointActivity" />
         <activity android:name=".study.RecordActivity" />
         <activity android:name=".study.StudyActivity" />

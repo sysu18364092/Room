@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.example.room.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class StudyActivity extends AppCompatActivity {
     private List<Chapter> chapterList = new ArrayList<>();
@@ -47,8 +49,9 @@ public class StudyActivity extends AppCompatActivity {
                 if (position==0){
                     SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit() ;
                     editor.putInt("chapter",chapters[position].getChapter());
-                    boolean b = editor.commit();
-                    Toast.makeText(StudyActivity.this,b+"",Toast.LENGTH_SHORT).show();
+                    editor.commit();
+                    Intent intent = new Intent(StudyActivity.this,TestActivity.class);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(StudyActivity.this,"后续章节正在开发中",Toast.LENGTH_SHORT).show();
