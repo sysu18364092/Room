@@ -127,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://82.156.37.121/login.php")
+                            .url("http://119.23.237.245/login.php")
                             .post(requestBody)
                             .build();
 

@@ -1,9 +1,14 @@
 package com.example.room.user;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -14,11 +19,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.room.DownloadUtil;
 import com.example.room.MainActivity;
 import com.example.room.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -26,11 +36,49 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 public class LoginActivity extends AppCompatActivity {
     EditText mEtUsername ;
     EditText mEtPassword ;
     Button mBtnLogin ;
     TextView mTvSignUp ;
+    public final static int QuestionBankSize = 10;
+    public final static String SavePath = "/data/data/com.example.room/files/";
+    public final static String DownloadURL = "http://119.23.237.245/user/record/";
+
+
+
+    public void requestPower() {
+        //判断是否已经赋予权限
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PERMISSION_GRANTED) {
+            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true。
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {//这里可以写个对话框之类的项向用户解释为什么要申请权限，并在对话框的确认键后续再次申请权限.它在用户选择"不再询问"的情况下返回false
+            } else {
+                //申请权限，字符串数组内是一个或多个要申请的权限，1是申请权限结果的返回参数，在onRequestPermissionsResult可以得知申请结果
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,}, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] == PERMISSION_GRANTED) {
+                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "" + "权限" + permissions[i] + "申请失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -55,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         mEtPassword = findViewById(R.id.et_password);
         mBtnLogin = findViewById(R.id.btn_login);
         mTvSignUp = findViewById(R.id.tv_sign_up);
+        requestPower();
         //跳转到注册界面
         mTvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +170,7 @@ public class LoginActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://82.156.37.121/login.php")
+                            .url("http://119.23.237.245/login.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -143,20 +192,23 @@ public class LoginActivity extends AppCompatActivity {
     private void parseJSONWithJSONObject(String jsonData,String strUsername){
         try{
             JSONObject jsonObject = new JSONObject(jsonData) ;
-
+            Log.d("LoginActivity","get "+jsonData);
             String success = jsonObject.getString("success");
             String message = jsonObject.getString("message");
             int scoreTime = jsonObject.getInt("TimerScore");
             int scorePass = jsonObject.getInt("PassScore");
+            int OnlineRecord = jsonObject.getInt("online_record");
             JSONArray jsonArray = new JSONArray(jsonObject.getString("Ostates"));
-            Looper.prepare();
+            //Looper.prepare();
             if(success.equals("1")) {
-                Toast.makeText(LoginActivity.this, "登陆成功",
-                        Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(LoginActivity.this, "登陆成功",Toast.LENGTH_SHORT).show();
+                String url = DownloadURL+strUsername+".txt";
+                String fileSavePath = SavePath+strUsername+".txt" ;
                 SharedPreferences.Editor editor = getSharedPreferences("login_state",MODE_PRIVATE).edit();
                 editor.putString("username",strUsername);
                 editor.putBoolean("state",true) ;
+                editor.putString("URL",url);
+                editor.putString("FileSavePath",fileSavePath);
                 editor.apply();
 
                 SharedPreferences.Editor editor1 = getSharedPreferences("property",MODE_PRIVATE).edit();
@@ -164,16 +216,62 @@ public class LoginActivity extends AppCompatActivity {
                 editor1.putInt("PassScore",scorePass) ;
                 editor1.putString("furnitureId",jsonArray.toString());
                 editor1.apply();
+                //下面检查下载
+                if (OnlineRecord==0){
+                    createQuestionLog(strUsername);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }else {
+                    Log.d("LoginActivity","url"+url);
+                    DownloadUtil.getDownloadUtil().download(url, SavePath, new DownloadUtil.OnDownloadListener() {
+                        @Override
+                        public void onDownloadSuccess() {
+                            Log.d("LoginActivity","Success");
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
 
+                        @Override
+                        public void onDownloading() {
+
+                        }
+
+                        @Override
+                        public void onDownloadFailed() {
+                            Log.d("LoginActivity","Failure");
+                        }
+                    });
+                }
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
-            else
-                Toast.makeText(LoginActivity.this,"用户名或密码错误",
-                        Toast.LENGTH_SHORT).show();
-            Looper.loop();
+            else{
+                //Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+            }
+
+            //Looper.loop();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void createQuestionLog(String username){
+        byte[] QuestionLog = new byte[QuestionBankSize] ;
+        //下面对初始化写题记录进行存储
+        File file = new File(SavePath+username+".txt");
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(QuestionLog);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                fos.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+
     }
 }

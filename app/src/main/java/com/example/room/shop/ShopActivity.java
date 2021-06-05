@@ -160,7 +160,7 @@ public class ShopActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://82.156.37.121/purchase.php")
+                            .url("http://119.23.237.245/purchase.php")
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();

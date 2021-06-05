@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/spacing_10">
+    android:padding="@dimen/spacing_10"
+    android:background="#86B404">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +27,85 @@
 
     <TextView
         android:id="@+id/tv_question_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_optionA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_optionB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_optionC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_optionD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:id="@+id/rg_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_10">
+        <RadioButton
+            android:id="@+id/rb_optionA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:textSize="@dimen/font_22"/>
+        <RadioButton
+            android:id="@+id/rb_optionB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B"
+            android:textSize="@dimen/font_22"/>
+        <RadioButton
+            android:id="@+id/rb_optionC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C"
+            android:textSize="@dimen/font_22"/>
+        <RadioButton
+            android:id="@+id/rb_optionD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D"
+            android:textSize="@dimen/font_22"/>
+    </RadioGroup>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="提交"
+            android:textSize="@dimen/font_22"
+            android:background="@color/blue"/>
+        <Button
+            android:id="@+id/btn_give_up"
+            android:layout_marginLeft="@dimen/spacing_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="不会"
+            android:textSize="@dimen/font_22"
+            android:background="@color/blue"/>
+    </LinearLayout>
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_analysis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

@@ -26,6 +26,8 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+
+
     private DrawerLayout mDrawerLayout ;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
