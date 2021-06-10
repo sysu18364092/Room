@@ -199,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
             int scorePass = jsonObject.getInt("PassScore");
             int OnlineRecord = jsonObject.getInt("online_record");
             JSONArray jsonArray = new JSONArray(jsonObject.getString("Ostates"));
+            JSONArray finishChapter = new JSONArray(jsonObject.getString("Fin"));
             //Looper.prepare();
             if(success.equals("1")) {
                 //Toast.makeText(LoginActivity.this, "登陆成功",Toast.LENGTH_SHORT).show();
@@ -216,6 +217,10 @@ public class LoginActivity extends AppCompatActivity {
                 editor1.putInt("PassScore",scorePass) ;
                 editor1.putString("furnitureId",jsonArray.toString());
                 editor1.apply();
+
+                SharedPreferences.Editor editor2 = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                editor2.putString("finishedChapter",finishChapter.toString());
+                editor2.apply();
                 //下面检查下载
                 if (OnlineRecord==0){
                     createQuestionLog(strUsername);

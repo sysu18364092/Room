@@ -13,8 +13,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.room.shop.Furniture;
 import com.example.room.shop.ShopActivity;
 import com.example.room.study.RecordActivity;
@@ -23,12 +25,19 @@ import com.example.room.study.WeakPointActivity;
 import com.example.room.user.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONArray;
+
 
 public class MainActivity extends AppCompatActivity {
 
-
-
+    private ImageView mIvPencil;
+    private ImageView mIvEraser;
+    private ImageView mIvBook;
     private DrawerLayout mDrawerLayout ;
+    private Furniture[] furnitures = {
+            new Furniture(0,"书本","book",R.drawable.ic_book, "一本书",20,"gold"),
+            new Furniture(1,"铅笔","pencil",R.drawable.ic_pencil, "一支铅笔",10,"gold"),
+            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")};
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -48,7 +57,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mIvPencil = findViewById(R.id.iv_pencil);
+        mIvEraser = findViewById(R.id.iv_eraser);
+        mIvBook = findViewById(R.id.iv_book);
+        updateBackground();
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -58,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);//设置导航按钮图标
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
+
         navView.setCheckedItem(R.id.nav_study);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -104,7 +117,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
+    @Override
+    protected void onStart(){
+        super.onStart();
+        updateBackground();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -140,6 +157,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    /**
+     * 加载桌面家具
+     */
+    private void updateBackground(){
+        SharedPreferences pref = getSharedPreferences("property",MODE_PRIVATE);
+        try {
+            JSONArray jsonArray = new JSONArray(pref.getString("furnitureId","[]"));
+            int ownerLength = jsonArray.length();
+            for (int i=0;i<ownerLength;++i){
+                loadProperty(jsonArray.getInt(i));
+            }
+        }catch (Exception e){
+
+        }
+    }
+    private void loadProperty(int index){
+        switch (index){
+            case 0:
+                mIvBook.setImageResource(furnitures[0].getImageId());
+                break;
+            case 1:
+                mIvPencil.setImageResource(furnitures[1].getImageId());
+                break;
+            case 2:
+                mIvEraser.setImageResource(furnitures[2].getImageId());
+                break;
+        }
     }
 
 }

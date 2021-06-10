@@ -123,8 +123,6 @@ public class ShopActivity extends AppCompatActivity {
                    int furnitureId = furnitures[pos].getFurnitureId();
                    int furniturePrice = furnitures[pos].getPrice();
                    sendPurchaseMessageWithOkHttp(furnitureId,furniturePrice);
-                   Intent intent = new Intent(ShopActivity.this,MainActivity.class);
-                   startActivity(intent);
                }
                else
                {
@@ -225,7 +223,8 @@ public class ShopActivity extends AppCompatActivity {
                     editor.putInt("TimeScore",scoreTime);
                     editor.commit();
                     //initFurniture();
-
+                    Intent intent = new Intent(ShopActivity.this,MainActivity.class);
+                    startActivity(intent);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

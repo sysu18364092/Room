@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/blue"
+    android:padding="@dimen/spacing_10">
+    <TextView
+        android:id="@+id/tv_study_report_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_30"
+        android:gravity="center"/>
+    <TextView
+        android:layout_marginTop="@dimen/spacing_20"
+        android:id="@+id/tv_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_22"/>
+    <TextView
+        android:id="@+id/tv_study_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_question_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_get_pass_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_get_time_score"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_back_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/back_main"
+        android:textSize="@dimen/font_22"
+        android:background="#FFBF00"/>
+
+
+</LinearLayout>

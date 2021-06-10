@@ -16,7 +16,8 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".study.TestActivity"/>
+        <activity android:name=".study.ReportActivity"></activity>
+        <activity android:name=".study.TestActivity" />
         <activity android:name=".shop.ShopActivity" />
         <activity android:name=".study.WeakPointActivity" />
         <activity android:name=".study.RecordActivity" />

@@ -49,6 +49,7 @@ public class StudyActivity extends AppCompatActivity {
                 if (position==0){
                     SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit() ;
                     editor.putInt("chapter",chapters[position].getChapter());
+                    editor.putInt("questionDone",0);
                     editor.commit();
                     Intent intent = new Intent(StudyActivity.this,TestActivity.class);
                     startActivity(intent);
