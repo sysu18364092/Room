@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.room.MainActivity;
 import com.example.room.R;
+import com.example.room.utils.NoMultiClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,9 +81,9 @@ public class ReportActivity extends AppCompatActivity {
         //mTvGetTimeScore.setText("您本次获得的时间积分为：");
         //mTvGetPassScore.setText("您本次获得的通关积分为：");
         updateScore(studyTime,passChapter);
-        mBtnBackMain.setOnClickListener(new View.OnClickListener() {
+        mBtnBackMain.setOnClickListener(new NoMultiClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onNoMultiClick(View v) {
                 Intent intent = new Intent(ReportActivity.this, MainActivity.class);
                 startActivity(intent);
             }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.example.room.DownloadUtil;
 import com.example.room.MainActivity;
 import com.example.room.R;
+import com.example.room.utils.NoMultiClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -105,16 +106,16 @@ public class LoginActivity extends AppCompatActivity {
         mTvSignUp = findViewById(R.id.tv_sign_up);
         requestPower();
         //跳转到注册界面
-        mTvSignUp.setOnClickListener(new View.OnClickListener() {
+        mTvSignUp.setOnClickListener(new NoMultiClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onNoMultiClick(View v) {
                 Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
                 startActivity(intent);
             }
         });
-        mBtnLogin.setOnClickListener(new View.OnClickListener() {
+        mBtnLogin.setOnClickListener(new NoMultiClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onNoMultiClick(View v) {
                 startLogin();
             }
         });

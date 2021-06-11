@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#86B404">
 
     <EditText
         android:id="@+id/et_username"
@@ -34,7 +35,8 @@
         android:layout_marginTop="50dp"
         android:layout_gravity="center"
         android:text="登录"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:background="@drawable/btn_login_selector"/>
 
     <TextView
         android:id="@+id/tv_sign_up"

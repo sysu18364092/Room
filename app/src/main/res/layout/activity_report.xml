@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:text="@string/back_main"
         android:textSize="@dimen/font_22"
-        android:background="#FFBF00"/>
+        android:background="@drawable/btn_report_back_selector"/>
 
 
 </LinearLayout>

@@ -390,9 +390,7 @@ public class TestActivity extends AppCompatActivity {
             String s = null;
             while ((n=fis.read(buffer))!=-1){
                 s = new String(buffer,0,n);
-                // Log.d("TestActivity","bytes read"+s);
             }
-            //Log.d("TestActivity","bytes length"+s.length());
             bytes = new byte[s.length()];
             bytes=s.getBytes();
 
@@ -509,7 +507,6 @@ public class TestActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(TestActivity.this,ReportActivity.class);
                 startActivity(intent);
-
             }
         });
 
