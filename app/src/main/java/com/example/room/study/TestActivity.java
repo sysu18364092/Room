@@ -30,6 +30,7 @@ import com.daquexian.flexiblerichtextview.FlexibleRichTextView;
 import com.example.room.MainActivity;
 import com.example.room.R;
 import com.example.room.shop.ShopActivity;
+import com.example.room.utils.NoMultiClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,6 +53,8 @@ public class TestActivity extends AppCompatActivity {
     private RadioButton mRbOption;
     private Button mBtnSubmit ;
     private Button mBtnGiveUp ;
+    private Button mBtnBasicPractise ;
+    private Button mBtnNextQuestion ;
     private FlexibleRichTextView mFRTvQuestion;
     private FlexibleRichTextView mFRTvOptionA;
     private FlexibleRichTextView mFRTvOptionB;
@@ -90,7 +93,8 @@ public class TestActivity extends AppCompatActivity {
         mRgOptions = findViewById(R.id.rg_options);
         mBtnSubmit = findViewById(R.id.btn_submit);
         mBtnGiveUp = findViewById(R.id.btn_give_up);
-
+        mBtnBasicPractise = findViewById(R.id.btn_basic_practise);
+        mBtnNextQuestion = findViewById(R.id.btn_next_question);
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
         //
@@ -101,6 +105,7 @@ public class TestActivity extends AppCompatActivity {
         mFRTvOptionD = findViewById(R.id.fr_tv_optionD);
         mFRTvAnalysis = findViewById(R.id.fr_tv_analysis);
         questionStudy = 0 ;
+        mBtnBasicPractise.setVisibility(View.GONE);
         startTest();
         sendQuestionContentWithOkHttp();
         // 监听选项
@@ -112,31 +117,29 @@ public class TestActivity extends AppCompatActivity {
             }
         });
         // 提交按钮
-        mBtnSubmit.setOnClickListener(new View.OnClickListener() {
+        mBtnSubmit.setOnClickListener(new NoMultiClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onNoMultiClick(View v) {
                 if(mRgOptions.getCheckedRadioButtonId() == -1){
                     Toast.makeText(TestActivity.this,"还没选",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    mBtnSubmit.setEnabled(false);
-                    mBtnGiveUp.setEnabled(false);
                     check();
-                    mBtnSubmit.setEnabled(true);
-                    mBtnGiveUp.setEnabled(true);
                 }
             }
         });
-        // 放弃按钮
-        mBtnGiveUp.setOnClickListener(new View.OnClickListener() {
+        mBtnBasicPractise.setOnClickListener(new NoMultiClickListener() {
             @Override
-            public void onClick(View v) {
-                mBtnSubmit.setEnabled(false);
-                mBtnGiveUp.setEnabled(false);
+            public void onNoMultiClick(View v) {
+
+            }
+        });
+        // 放弃按钮
+        mBtnGiveUp.setOnClickListener(new NoMultiClickListener() {
+            @Override
+            public void onNoMultiClick(View v) {
                 showAnalysis();
                 sendQuestionResultWithOkHttp(false);
-                mBtnSubmit.setEnabled(true);
-                mBtnGiveUp.setEnabled(true);
             }
 
         });
@@ -234,6 +237,7 @@ public class TestActivity extends AppCompatActivity {
 
                     SharedPreferences studyPref = getSharedPreferences("study_state",MODE_PRIVATE);
                     int QId = studyPref.getInt("Qid",0);
+                    int questionType = studyPref.getInt("QuestionType",0);
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder()
                             .add("username",username)
@@ -355,30 +359,40 @@ public class TestActivity extends AppCompatActivity {
         Log.d("TestActivity","jsonData "+jsonData);
         try {
             JSONObject jsonObject =  new JSONObject(jsonData);
-            JSONArray jsonArray = new JSONArray(jsonObject.getString("Qid"));
-            SharedPreferences pref = getSharedPreferences("login_state",MODE_PRIVATE);
-            String fileSavePath = pref.getString("FileSavePath",null);
-            int nextQuestion = updateQuestionBank(fileSavePath,jsonArray,result);
-            if (nextQuestion!=-1){
-                SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
-                editor.putInt("Qid",nextQuestion);
-                editor.commit();
-                sendQuestionContentWithOkHttp();
+
+            if (result==true){
+                JSONArray jsonArray = new JSONArray(jsonObject.getString("Qid"));
+                SharedPreferences pref = getSharedPreferences("login_state",MODE_PRIVATE);
+                String fileSavePath = pref.getString("FileSavePath",null);
+                int nextQuestion = updateQuestionBank(fileSavePath,jsonArray);
+                if (nextQuestion!=-1){
+                    SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                    editor.putInt("Qid",nextQuestion);
+                    editor.commit();
+                    sendQuestionContentWithOkHttp();
+                }
+                Log.d("TestActivity","nextQuestion  "+nextQuestion);
             }
-            Log.d("TestActivity","nextQuestion  "+nextQuestion);
+            else{
+                SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                editor.putInt("QuestionType",1);
+                editor.commit();
+                Log.d("TestActivity","QuestionType Changed");
+            }
         }catch (Exception e){
 
         }
     }
 
     /**
-     * 更新题库
+     * 首先将本地存储的Qid数组读出，更新题库
+     * 然后
      * 返回一道未写过的题
      * @param savePath
      * @param jsonArray
      * @return
      */
-    private int updateQuestionBank(String savePath,JSONArray jsonArray,boolean result){
+    private int updateQuestionBank(String savePath,JSONArray jsonArray){
         // 读
         File file = new File(savePath);
         FileInputStream fis = null;
@@ -406,34 +420,32 @@ public class TestActivity extends AppCompatActivity {
         // 读
 
         // 写
-        if(result==true){
-            //SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
-            SharedPreferences pref = getSharedPreferences("study_state",MODE_PRIVATE);
-            int questionDone = pref.getInt("questionDone",0);
-            int Qid = pref.getInt("Qid",0);
+        //SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+        SharedPreferences pref = getSharedPreferences("study_state",MODE_PRIVATE);
+        int questionDone = pref.getInt("questionDone",0);
+        int Qid = pref.getInt("Qid",0);
 
-            SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
-            editor.putInt("questionDone",questionDone+1);
-            editor.commit();
+        SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+        editor.putInt("questionDone",questionDone+1);
+        editor.commit();
 
-            bytes[Qid]=0x01;
-            FileOutputStream fos = null;
+        bytes[Qid]=0x01;
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(bytes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
             try {
-                fos = new FileOutputStream(file);
-                fos.write(bytes);
-            }catch (Exception e){
+                fos.close();
+            }catch (IOException e){
                 e.printStackTrace();
-            }finally {
-                try {
-                    fos.close();
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
             }
         }
-        // 写
-
-        boolean finished = true ;// 判断所给题是否完成
+        //-----------------------------------
+        // 判断所给题是否完成
+        boolean finished = true ;
         try {
             Log.d("TestActivity","judging");
             int index = 0 ;
@@ -447,19 +459,16 @@ public class TestActivity extends AppCompatActivity {
                 }
             }
 
-            if (finished&&result==false){
-                return jsonArray.getInt(0);
-            }
             //表示已经完成了本章节的学习
-            else if (finished&&result==true){
+            if (finished){
                 Log.d("TestActivity","finished");
                 long elapsedTime = (SystemClock.elapsedRealtime()-chronometer.getBase())/60000 ;
                 Log.d("TestActivity","pass time "+(int)elapsedTime);
                 int time = (int) elapsedTime ;
-                SharedPreferences pref = getSharedPreferences("study_state",MODE_PRIVATE);
-                int chapter = pref.getInt("chapter",0);
+                SharedPreferences pref1 = getSharedPreferences("study_state",MODE_PRIVATE);
+                int chapter = pref1.getInt("chapter",0);
                 //更新完成章节表
-                JSONArray jsonArray1= new JSONArray(pref.getString("finishedChapter","[]"));
+                JSONArray jsonArray1= new JSONArray(pref1.getString("finishedChapter","[]"));
                 int totalChapter = jsonArray1.length();
                 int[] finishedChapter = new int[totalChapter];
                 for (int i=0;i<totalChapter;i++){
@@ -471,11 +480,10 @@ public class TestActivity extends AppCompatActivity {
                     jsonArray2.put(finishedChapter[j]);
                 }
                 //
-                SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
-                editor.putInt("studyTime",time);
-                editor.putString("finishedChapter",jsonArray2.toString());
-                editor.commit();
-
+                SharedPreferences.Editor editor1 = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                editor1.putInt("studyTime",time);
+                editor1.putString("finishedChapter",jsonArray2.toString());
+                editor1.commit();
                 Intent intent = new Intent(TestActivity.this,ReportActivity.class);
                 startActivity(intent);
             }
@@ -483,7 +491,8 @@ public class TestActivity extends AppCompatActivity {
                 return index;
             }
 
-        }catch (Exception e){ }
+            }catch (Exception e){ }
+        // 写
         return -1 ;
     }
 

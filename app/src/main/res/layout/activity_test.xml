@@ -93,7 +93,7 @@
             android:layout_weight="1"
             android:text="提交"
             android:textSize="@dimen/font_22"
-            android:background="@color/blue"/>
+            android:background="@drawable/btn_login_selector"/>
         <Button
             android:id="@+id/btn_give_up"
             android:layout_marginLeft="@dimen/spacing_10"
@@ -102,8 +102,22 @@
             android:layout_weight="1"
             android:text="不会"
             android:textSize="@dimen/font_22"
-            android:background="@color/blue"/>
+            android:background="@drawable/btn_login_selector"/>
     </LinearLayout>
+    <Button
+        android:id="@+id/btn_next_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:text="下一题"
+        android:textSize="@dimen/font_22"
+        android:background="@drawable/btn_login_selector"/>
+    <Button
+        android:id="@+id/btn_basic_practise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:background="@drawable/btn_login_selector"/>
     <com.daquexian.flexiblerichtextview.FlexibleRichTextView
         android:id="@+id/fr_tv_analysis"
         android:layout_width="match_parent"
