@@ -61,6 +61,27 @@ public class TestActivity extends AppCompatActivity {
     private FlexibleRichTextView mFRTvOptionC;
     private FlexibleRichTextView mFRTvOptionD;
     private FlexibleRichTextView mFRTvAnalysis;
+    /**
+     *  wait表示等待用户进入下一题,以下简称 W
+     *  true表示等待，false则相反
+     *  在整个类中一共有4处（不计初始化）会对W进行更新：
+     *  1.点击放弃按钮mBtnGiveUp，将W置为true
+     *  2.check()如果questionType为1，则将W置为true
+     *  3.在parseQuestionContent中，更新完题目内容后，将W置为false
+     *  4.在parseQuestionResult中，解析完返回的result后，将W置为true
+     */
+    static boolean wait ;
+    /**
+     *  questionType表示题目种类，以下简称QT
+     *  0表示测试题，1表示基础题,-1表示基础题结束状态
+     *  在整个类中一共有4处（不计初始化）会对QT进行更新：
+     *  1.在按下一题按钮mBtnNextQuestion时，如果QT为-1时，将QT置为0（后续发送请求）
+     *  2.当测试时题目写错或者放弃将QT置为1
+     *  3.当基础题完成到最后一道时，将QT置为-1
+     *  4.当手动结束基础题训练，将QT置为0
+     *
+     */
+    static int questionType ;
     static int appCount ;
     static boolean isRunInBackground;
     private Handler handler = new Handler();
@@ -88,6 +109,8 @@ public class TestActivity extends AppCompatActivity {
         initBackgroundCallBack();//后台调用
 
         AjLatexMath.init(this);
+        wait = false ;
+        questionType = 0 ;
         // 如果希望自动识别代码段中的语言以实现高亮  // CodeProcessor.init(this);
         chronometer = findViewById(R.id.chronometer);
         mRgOptions = findViewById(R.id.rg_options);
@@ -124,14 +147,10 @@ public class TestActivity extends AppCompatActivity {
                     Toast.makeText(TestActivity.this,"还没选",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    check();
+                    if (!wait){
+                        check();
+                    }
                 }
-            }
-        });
-        mBtnBasicPractise.setOnClickListener(new NoMultiClickListener() {
-            @Override
-            public void onNoMultiClick(View v) {
-
             }
         });
         // 放弃按钮
@@ -139,11 +158,47 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onNoMultiClick(View v) {
                 showAnalysis();
-                sendQuestionResultWithOkHttp(false);
+                if (questionType==0){
+                    sendQuestionResultWithOkHttp(false);
+                }
+                else {
+                    wait = true ;
+                }
             }
-
         });
-        
+        // 下一题按钮
+        /**
+         * 使用wait控制按钮工作
+         * 当wait==false时，可以进行提交工作，
+         * 在parseQuestionResult函数中将wait置为false
+         * 当wait==true时，可以切换到下一题，
+         * 在parseQuestionContent函数中将wait置为false
+         */
+        mBtnNextQuestion.setOnClickListener(new NoMultiClickListener() {
+            @Override
+            public void onNoMultiClick(View v) {
+                if (wait){
+                    checkQuestionType();
+                    if (questionType==-1){
+                        showEndBasicTraining();
+                        questionType = 0 ;
+                    }
+                    sendQuestionContentWithOkHttp();
+                }
+                else {
+                    Toast.makeText(TestActivity.this,"请先选择提交或放弃",Toast.LENGTH_SHORT).show();
+                    Log.d("TestActivity","busy");
+                }
+
+            }
+        });
+        // 结束训练按钮
+        mBtnBasicPractise.setOnClickListener(new NoMultiClickListener() {
+            @Override
+            public void onNoMultiClick(View v) {
+                EndTraining();
+            }
+        });
     }
 
     /**
@@ -215,11 +270,22 @@ public class TestActivity extends AppCompatActivity {
             result = true ;
         }
         else{
-            Toast.makeText(TestActivity.this,"回答错误",Toast.LENGTH_SHORT).show();
+            if (questionType==0){
+                Toast.makeText(TestActivity.this,"回答错误，下面开始基础题训练",Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(TestActivity.this,"回答错误",Toast.LENGTH_SHORT).show();
+            }
             result = false ;
         }
-        showAnalysis();
-        sendQuestionResultWithOkHttp(result);
+        if (questionType==0){
+            sendQuestionResultWithOkHttp(result);
+            showAnalysis();
+        }
+        else {
+            showAnalysis();
+            wait = true ;
+        }
     }
     /**
      * 向服务器查询Qid对应的题目
@@ -234,16 +300,24 @@ public class TestActivity extends AppCompatActivity {
                 try {
                     SharedPreferences userPref = getSharedPreferences("login_state",MODE_PRIVATE);
                     String username = userPref.getString("username", null);
-
-                    SharedPreferences studyPref = getSharedPreferences("study_state",MODE_PRIVATE);
-                    int QId = studyPref.getInt("Qid",0);
-                    int questionType = studyPref.getInt("QuestionType",0);
+                    RequestBody requestBody = null ;
                     OkHttpClient client = new OkHttpClient();
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("username",username)
-                            .add("Qid",QId+"")
-                            .add("type","QuestionContent")
-                            .build();
+                    if (questionType==0){
+                        SharedPreferences studyPref = getSharedPreferences("study_state",MODE_PRIVATE);
+                        int QId = studyPref.getInt("Qid",0);
+                        requestBody = new FormBody.Builder()
+                                .add("username",username)
+                                .add("Qid",QId+"")
+                                .add("type","QuestionContent")
+                                .build();
+                    }
+                    else{
+                        int BQId = getNextBasicQuestion();
+                        requestBody = new FormBody.Builder()
+                                .add("BQid",BQId+"")
+                                .add("type","BasicQuestionContent")
+                                .build();
+                    }
 
                     Request request = new Request.Builder()
                             .url("http://119.23.237.245/question_request.php")
@@ -252,7 +326,7 @@ public class TestActivity extends AppCompatActivity {
 
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
-                    //Log.d("TestActivity","this is  "+responseData);
+                    Log.d("TestActivity","responseData"+responseData);
                     parseQuestionContent(responseData);
                 }catch (Exception e){
                     e.printStackTrace();
@@ -348,6 +422,7 @@ public class TestActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+        wait = false ;
     }
 
     /**
@@ -361,33 +436,37 @@ public class TestActivity extends AppCompatActivity {
             JSONObject jsonObject =  new JSONObject(jsonData);
 
             if (result==true){
-                JSONArray jsonArray = new JSONArray(jsonObject.getString("Qid"));
+                JSONArray jsonArrayQid = new JSONArray(jsonObject.getString("Qid"));
                 SharedPreferences pref = getSharedPreferences("login_state",MODE_PRIVATE);
                 String fileSavePath = pref.getString("FileSavePath",null);
-                int nextQuestion = updateQuestionBank(fileSavePath,jsonArray);
+                int nextQuestion = updateQuestionBank(fileSavePath,jsonArrayQid);
                 if (nextQuestion!=-1){
                     SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
                     editor.putInt("Qid",nextQuestion);
                     editor.commit();
-                    sendQuestionContentWithOkHttp();
+                    //sendQuestionContentWithOkHttp();
                 }
                 Log.d("TestActivity","nextQuestion  "+nextQuestion);
+
             }
             else{
+                String BQid = jsonObject.getString("BQid") ;
                 SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
-                editor.putInt("QuestionType",1);
+                editor.putString("BQid",BQid);
                 editor.commit();
+                questionType = 1 ;
                 Log.d("TestActivity","QuestionType Changed");
             }
+
         }catch (Exception e){
 
         }
+        wait = true ;
     }
 
     /**
      * 首先将本地存储的Qid数组读出，更新题库
-     * 然后
-     * 返回一道未写过的题
+     * 返回一道未写过的题ID
      * @param savePath
      * @param jsonArray
      * @return
@@ -506,6 +585,10 @@ public class TestActivity extends AppCompatActivity {
         mFRTvAnalysis.setText(analysis);
     }
 
+    /**
+     *  生成学习报告
+     *  切换到下一个界面
+     */
     private void createStudyReport(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(TestActivity.this);
         dialog.setTitle("");
@@ -522,6 +605,104 @@ public class TestActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     *  检查QT，
+     *  根据QT取值设置结束训练按钮是否显示
+     */
+    private void checkQuestionType(){
+        if (questionType==1){
+            mBtnBasicPractise.setVisibility(View.VISIBLE);
+        }
+        else {
+            mBtnBasicPractise.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 获得下一道基础题的ID
+     * 每次获取将在内存中BQid数组中删除获取题目ID
+     * 当基础题全部完成，将会给将QT置-1
+     * @return
+     */
+    private int getNextBasicQuestion(){
+        SharedPreferences pref = getSharedPreferences("study_state",MODE_PRIVATE);
+        int nextBasicQuestionID = -1 ;
+        try{
+            JSONArray jsonArray = new JSONArray(pref.getString("BQid","[]"));
+            Log.d("TestActivity",jsonArray.toString());
+            int remainingQuestionsLength = jsonArray.length();
+            nextBasicQuestionID = jsonArray.getInt(0);
+            /*if(remainingQuestionsLength!=0){
+
+                JSONArray remainingQuestions = new JSONArray();
+                for (int i=0;i<remainingQuestionsLength-1;++i){
+                    remainingQuestions.put(jsonArray.getInt(i+1));
+                }
+                SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                editor.putString("BQid",remainingQuestions.toString());
+                editor.commit();
+            }*/
+            if (remainingQuestionsLength==1){
+                questionType = -1 ;//表示基础题已经全部完成
+            }else{
+                JSONArray remainingQuestions = new JSONArray();
+                for (int i=0;i<remainingQuestionsLength-1;++i){
+                    remainingQuestions.put(jsonArray.getInt(i+1));
+                }
+                SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                editor.putString("BQid",remainingQuestions.toString());
+                editor.commit();
+            }
+
+        }catch (Exception e){
+
+        }
+        Log.d("TestActivity","nextBasicQuestionID "+nextBasicQuestionID);
+        return nextBasicQuestionID;
+    }
+
+    /**
+     *  用户手动退出基础题训练
+     *  如果用户选择退出，将更改QT，并且更新题目
+     */
+    private void EndTraining(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(TestActivity.this);
+        dialog.setTitle("");
+        dialog.setMessage("您确认要结束本次训练吗？");
+        dialog.setCancelable(true);
+        dialog.setPositiveButton("离开", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                questionType = 0 ;
+                mBtnBasicPractise.setVisibility(View.GONE);
+                showAnalysis();
+                sendQuestionContentWithOkHttp();
+            }
+        });
+        dialog.setNegativeButton("继续训练", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        dialog.show();
+    }
+
+    /**
+     *  当用户完成所有基础题训练时显示一个弹窗
+     *  无实际作用
+     */
+    private void showEndBasicTraining(){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(TestActivity.this);
+        dialog.setTitle("");
+        dialog.setMessage("恭喜您已经完成了基础题训练");
+        dialog.setCancelable(true);
+        dialog.setPositiveButton("离开", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        dialog.show();
+    }
     /**
      * 当app切换到后台
      * 将停止计时

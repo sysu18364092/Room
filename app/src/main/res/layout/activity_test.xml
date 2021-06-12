@@ -53,31 +53,35 @@
 
     <RadioGroup
         android:id="@+id/rg_options"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="@dimen/spacing_10">
         <RadioButton
             android:id="@+id/rb_optionA"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="A"
             android:textSize="@dimen/font_22"/>
         <RadioButton
+            android:layout_weight="1"
             android:id="@+id/rb_optionB"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="B"
             android:textSize="@dimen/font_22"/>
         <RadioButton
+            android:layout_weight="1"
             android:id="@+id/rb_optionC"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="C"
             android:textSize="@dimen/font_22"/>
         <RadioButton
+            android:layout_weight="1"
             android:id="@+id/rb_optionD"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="D"
             android:textSize="@dimen/font_22"/>
@@ -108,7 +112,7 @@
         android:id="@+id/btn_next_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_20"
+        android:layout_marginTop="@dimen/spacing_10"
         android:text="下一题"
         android:textSize="@dimen/font_22"
         android:background="@drawable/btn_login_selector"/>
@@ -116,10 +120,13 @@
         android:id="@+id/btn_basic_practise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_20"
+        android:layout_marginTop="@dimen/spacing_10"
+        android:text="结束基础题训练"
+        android:textSize="@dimen/font_22"
         android:background="@drawable/btn_login_selector"/>
     <com.daquexian.flexiblerichtextview.FlexibleRichTextView
         android:id="@+id/fr_tv_analysis"
+        android:layout_marginTop="@dimen/spacing_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
