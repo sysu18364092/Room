@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.room.DownloadUtil;
 import com.example.room.MainActivity;
 import com.example.room.R;
 import com.example.room.utils.NoMultiClickListener;
@@ -18,7 +19,13 @@ import com.example.room.utils.NoMultiClickListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -32,6 +39,9 @@ public class ReportActivity extends AppCompatActivity {
     TextView mTvGetTimeScore ;
     TextView mTvGetPassScore;
     Button mBtnBackMain ;
+    public final static String SavePath = "/data/data/com.example.room/files/";
+    public final static String UploadURL = "http://119.23.237.245/upload_record_file.php";
+    
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -57,6 +67,7 @@ public class ReportActivity extends AppCompatActivity {
         int questionDone = pref.getInt("questionDone",0);
         JSONArray finishedChapter = null ;
         int passChapter = 0 ;
+        uploadStudyRecord();
         try {
             finishedChapter = new JSONArray(pref.getString("finishedChapter","[]"));
             if (finishedChapter.getInt(chapter)==1){
@@ -81,6 +92,7 @@ public class ReportActivity extends AppCompatActivity {
         //mTvGetTimeScore.setText("您本次获得的时间积分为：");
         //mTvGetPassScore.setText("您本次获得的通关积分为：");
         updateScore(studyTime,passChapter);
+
         mBtnBackMain.setOnClickListener(new NoMultiClickListener() {
             @Override
             public void onNoMultiClick(View v) {
@@ -108,7 +120,6 @@ public class ReportActivity extends AppCompatActivity {
                 try {
                     SharedPreferences pref = getSharedPreferences("login_state", MODE_PRIVATE);
                     String username = pref.getString("username", null);
-
                     OkHttpClient client = new OkHttpClient();
                     RequestBody requestBody = new FormBody.Builder()
                             .add("username",username)
@@ -148,5 +159,43 @@ public class ReportActivity extends AppCompatActivity {
         }catch (Exception e){
 
         }
+    }
+    private void uploadStudyRecord(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                SharedPreferences pref = getSharedPreferences("login_state",MODE_PRIVATE);
+                String username = pref.getString("username","");
+                Log.d("ReportActivity","UploadBack username"+username);
+                String fileSavePath = pref.getString("FileSavePath",null);
+                File file = new File(fileSavePath);
+                OkHttpClient client = new OkHttpClient();
+
+                MediaType mediaType=MediaType.Companion.parse("text/x-markdown; charset=utf-8");
+                RequestBody requestBody = RequestBody.Companion.create(file,mediaType);
+                RequestBody fileBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("username",username)
+                        .addFormDataPart("record",file.getName(),requestBody)
+                        .build();
+                Request request = new Request.Builder()
+                        .header("Authorization","ClientID"+UUID.randomUUID())
+                        .url(UploadURL)
+                        .post(fileBody)
+                        .build();
+                try {
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    Log.d("ReportActivity","UploadBack "+responseData);
+                    parseUploadResult(responseData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private void parseUploadResult(String jsonData){
+
     }
 }
