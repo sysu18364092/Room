@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
                         toSignOut();
                         break;
                     case R.id.nav_study:
+                        SharedPreferences.Editor editorStudy = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                        editorStudy.putInt("Mode",0);
+                        editorStudy.commit();
                         intent = new Intent(MainActivity.this, StudyActivity.class);
                         startActivity(intent);
                         break;
@@ -93,7 +96,10 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_weak_point:
-                        intent = new Intent(MainActivity.this, WeakPointActivity.class);
+                        SharedPreferences.Editor editorWeakPoint = getSharedPreferences("study_state",MODE_PRIVATE).edit();
+                        editorWeakPoint.putInt("Mode",1);
+                        editorWeakPoint.commit();
+                        intent = new Intent(MainActivity.this, StudyActivity.class);
                         startActivity(intent);
                         break;
                 }

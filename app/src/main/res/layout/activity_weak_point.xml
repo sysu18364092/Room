@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#86B404">
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_weak_point_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.daquexian.flexiblerichtextview.FlexibleRichTextView
+        android:id="@+id/fr_tv_weak_point_analysis"
+        android:layout_marginTop="@dimen/spacing_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn_next_weak_point"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="下一题"
+            android:textSize="@dimen/font_22"
+            android:background="@drawable/btn_login_selector"/>
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_marginLeft="@dimen/spacing_10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="已掌握"
+            android:textSize="@dimen/font_22"
+            android:background="@drawable/btn_login_selector"/>
+    </LinearLayout>
 </LinearLayout>

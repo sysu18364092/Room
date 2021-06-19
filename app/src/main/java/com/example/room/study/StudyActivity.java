@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.room.MainActivity;
 import com.example.room.R;
 
 import java.util.ArrayList;
@@ -51,8 +52,16 @@ public class StudyActivity extends AppCompatActivity {
                     editor.putInt("chapter",chapters[position].getChapter());
                     editor.putInt("questionDone",0);
                     editor.commit();
-                    Intent intent = new Intent(StudyActivity.this,TestActivity.class);
-                    startActivity(intent);
+                    SharedPreferences pref = getSharedPreferences("study_state",MODE_PRIVATE);
+                    int mode = pref.getInt("Mode",0);
+                    if (mode==0){
+                        Intent intent = new Intent(StudyActivity.this,TestActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Intent intent = new Intent(StudyActivity.this, WeakPointActivity.class);
+                        startActivity(intent);
+                    }
                 }
                 else{
                     Toast.makeText(StudyActivity.this,"后续章节正在开发中",Toast.LENGTH_SHORT).show();
