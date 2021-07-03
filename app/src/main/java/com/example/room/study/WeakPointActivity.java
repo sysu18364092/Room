@@ -25,11 +25,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 public class WeakPointActivity extends AppCompatActivity {
     private FlexibleRichTextView mFRTvWeakPointQuestion;
     private FlexibleRichTextView mFRTvWeakPointAnalysis;
     private Button mBtnNextWeakPoint ;
     private Button mBtnDelete ;
+    public final static String WeakPointURL = "http://39.108.187.44/question_request.php";
     static boolean wait ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,13 @@ public class WeakPointActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     *  startReview
+     *  依次调用
+     *  check()
+     *  sendNextWeakPointMessageWithOkHttp()
+     *  showWeakPoint()
+     */
     private void startReview(){
         getWeakPointWithOkHttp();
         if (!wait){
@@ -96,7 +105,7 @@ public class WeakPointActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/question_request.php")
+                            .url(WeakPointURL)
                             .post(requestBody)
                             .build();
 
@@ -163,7 +172,7 @@ public class WeakPointActivity extends AppCompatActivity {
 
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/question_request.php")
+                            .url(WeakPointURL)
                             .post(requestBody)
                             .build();
 

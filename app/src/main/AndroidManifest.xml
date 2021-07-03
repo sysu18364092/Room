@@ -20,7 +20,6 @@
         <activity android:name=".study.TestActivity" />
         <activity android:name=".shop.ShopActivity" />
         <activity android:name=".study.WeakPointActivity" />
-        <activity android:name=".study.RecordActivity" />
         <activity android:name=".study.StudyActivity" />
         <activity android:name=".user.SignUpActivity" />
         <activity android:name=".user.LoginActivity" />

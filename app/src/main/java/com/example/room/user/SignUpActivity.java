@@ -22,11 +22,12 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SignUpActivity extends AppCompatActivity {
-    EditText mEtSignUpUsername;
-    EditText mEtSignUpPassword;
-    EditText mEtSignUpPasswordConfirm;
-    EditText mEtSignUpMail;
-    Button mBtnSignUp;
+    private EditText mEtSignUpUsername;
+    private EditText mEtSignUpPassword;
+    private EditText mEtSignUpPasswordConfirm;
+    private EditText mEtSignUpMail;
+    private Button mBtnSignUp;
+    public final static String SignUpURL = "http://39.108.187.44/login.php";
     /**
      * 这个类定义了SignUpActivity中的各个组件
      *
@@ -127,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/login.php")
+                            .url(SignUpURL)
                             .post(requestBody)
                             .build();
 

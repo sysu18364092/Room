@@ -48,7 +48,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class TestActivity extends AppCompatActivity {
-    Chronometer chronometer;
+    private Chronometer chronometer;
     private RadioGroup mRgOptions;
     private RadioButton mRbOption;
     private Button mBtnSubmit ;
@@ -61,6 +61,7 @@ public class TestActivity extends AppCompatActivity {
     private FlexibleRichTextView mFRTvOptionC;
     private FlexibleRichTextView mFRTvOptionD;
     private FlexibleRichTextView mFRTvAnalysis;
+    public final static String TestURL = "http://39.108.187.44/question_request.php";
     /**
      *  wait表示等待用户进入下一题,以下简称 W
      *  true表示等待，false则相反
@@ -178,6 +179,7 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onNoMultiClick(View v) {
                 if (wait){
+                    mRgOptions.clearCheck();
                     checkQuestionType();
                     if (questionType==-1){
                         showEndBasicTraining();
@@ -225,7 +227,7 @@ public class TestActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/question_request.php")
+                            .url(TestURL)
                             .post(requestBody)
                             .build();
 
@@ -320,7 +322,7 @@ public class TestActivity extends AppCompatActivity {
                     }
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/question_request.php")
+                            .url(TestURL)
                             .post(requestBody)
                             .build();
 
@@ -368,7 +370,7 @@ public class TestActivity extends AppCompatActivity {
                                 .build();
                     }
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/question_request.php")
+                            .url(TestURL)
                             .post(requestBody)
                             .build();
 

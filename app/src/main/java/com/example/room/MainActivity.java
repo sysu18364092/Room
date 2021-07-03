@@ -14,14 +14,10 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.room.shop.Furniture;
 import com.example.room.shop.ShopActivity;
-import com.example.room.study.RecordActivity;
 import com.example.room.study.StudyActivity;
-import com.example.room.study.WeakPointActivity;
 import com.example.room.user.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 
@@ -89,10 +85,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.nav_shop:
                         intent = new Intent(MainActivity.this, ShopActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_record:
-                        intent = new Intent(MainActivity.this, RecordActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.nav_weak_point:
@@ -180,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    /**
+     *
+     * @param index
+     */
     private void loadProperty(int index){
         switch (index){
             case 0:

@@ -43,10 +43,10 @@ public class ShopActivity extends AppCompatActivity {
             new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")};
     private List<Furniture> furnitureList = new ArrayList<>();
     private FurnitureAdapter adapter ;
-    private RecyclerView mRecyclerview ;
     private int scoreTime ;
     private int scorePass ;
     private int[] furnitureOnSale ;
+    public final static String ShopURL = "http://39.108.187.44/purchase.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +106,7 @@ public class ShopActivity extends AppCompatActivity {
 
     /**
      * 购买家具
+     * 如果购买成功则向服务器发送请求
      * @param view
      * @param position
      */
@@ -158,7 +159,7 @@ public class ShopActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/purchase.php")
+                            .url(ShopURL)
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -177,7 +178,7 @@ public class ShopActivity extends AppCompatActivity {
     /**
      * 解析返回的json文件,
      * 并且更新资产，
-     * 刷新商店界面
+     * 返回主界面
       * @param jsonData
      */
     private void parseJSONWithJSONObject(String jsonData,int furnitureId,int furniturePrice){
@@ -192,7 +193,7 @@ public class ShopActivity extends AppCompatActivity {
                 //更新资产
                 SharedPreferences pref = getSharedPreferences("property",MODE_PRIVATE);
                 try {
-
+                    Log.d("ShopActivity","here");
                     JSONArray jsonArray = new JSONArray(pref.getString("furnitureId","[]"));
 
                     scoreTime = scoreTime - furniturePrice ;
@@ -222,7 +223,6 @@ public class ShopActivity extends AppCompatActivity {
                     editor.putString("furnitureId",jsonArray1.toString());
                     editor.putInt("TimeScore",scoreTime);
                     editor.commit();
-                    //initFurniture();
                     Intent intent = new Intent(ShopActivity.this,MainActivity.class);
                     startActivity(intent);
                 }catch (Exception e){
@@ -235,6 +235,9 @@ public class ShopActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  更新积分
+     */
     private void updateScore(){
         TextView mTvTimeScore ;
         TextView mTvPassScore ;

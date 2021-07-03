@@ -1,7 +1,4 @@
-package com.example.room;
-
-import android.os.Environment;
-import android.util.Log;
+package com.example.room.utils;
 
 import androidx.annotation.NonNull;
 

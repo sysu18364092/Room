@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.room.DownloadUtil;
 import com.example.room.MainActivity;
 import com.example.room.R;
 import com.example.room.utils.NoMultiClickListener;
@@ -32,16 +31,16 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ReportActivity extends AppCompatActivity {
-    TextView mTvReportTitle ;
-    TextView mTvReport ;
-    TextView mTvStudyTime ;
-    TextView mTvQuestionDone ;
-    TextView mTvGetTimeScore ;
-    TextView mTvGetPassScore;
-    Button mBtnBackMain ;
+    private TextView mTvReportTitle ;
+    private TextView mTvReport ;
+    private TextView mTvStudyTime ;
+    private TextView mTvQuestionDone ;
+    private TextView mTvGetTimeScore ;
+    private TextView mTvGetPassScore;
+    private Button mBtnBackMain ;
     public final static String SavePath = "/data/data/com.example.room/files/";
-    public final static String UploadURL = "http://119.23.237.245/upload_record_file.php";
-    
+    public final static String UploadURL = "http://39.108.187.44/upload_record_file.php";
+    public final static String GetScoreURL = "http://39.108.187.44/scoreboard.php";
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -128,7 +127,7 @@ public class ReportActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/scoreboard.php")
+                            .url(GetScoreURL)
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -188,14 +187,14 @@ public class ReportActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     Log.d("ReportActivity","UploadBack "+responseData);
-                    parseUploadResult(responseData);
+                    //parseUploadResult(responseData);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
     }
-    private void parseUploadResult(String jsonData){
-
-    }
+//    private void parseUploadResult(String jsonData){
+//
+//    }
 }

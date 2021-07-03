@@ -1,6 +1,5 @@
 package com.example.room.user;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -8,9 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.room.DownloadUtil;
+import com.example.room.utils.DownloadUtil;
 import com.example.room.MainActivity;
 import com.example.room.R;
 import com.example.room.utils.NoMultiClickListener;
@@ -40,16 +37,19 @@ import okhttp3.Response;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText mEtUsername ;
-    EditText mEtPassword ;
-    Button mBtnLogin ;
-    TextView mTvSignUp ;
+    private EditText mEtUsername ;
+    private EditText mEtPassword ;
+    private Button mBtnLogin ;
+    private TextView mTvSignUp ;
     public final static int QuestionBankSize = 10;
     public final static String SavePath = "/data/data/com.example.room/files/";
-    public final static String DownloadURL = "http://119.23.237.245/user/record/";
+    public final static String DownloadURL = "http://39.108.187.44/user/record/";
+    public final static String LoginURL = "http://39.108.187.44/login.php";
 
 
-
+    /**
+     *  向用户请求存储权限
+     */
     public void requestPower() {
         //判断是否已经赋予权限
         if (ContextCompat.checkSelfPermission(this,
@@ -66,6 +66,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 检查权限检查结果
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -154,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 使用OkHttp向服务器发送HTTP请求
-     *
+     * 将登陆信息发送给服务器
      * @param strUsername 用户名
      * @param strPassword 密码
      */
@@ -171,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url("http://119.23.237.245/login.php")
+                            .url(LoginURL)
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -261,6 +267,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     *  创建写题记录文件
+     * @param username
+     */
     private void createQuestionLog(String username){
         byte[] QuestionLog = new byte[QuestionBankSize] ;
         //下面对初始化写题记录进行存储
