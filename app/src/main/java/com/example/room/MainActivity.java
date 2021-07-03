@@ -34,6 +34,13 @@ public class MainActivity extends AppCompatActivity {
             new Furniture(0,"书本","book",R.drawable.ic_book, "一本书",20,"gold"),
             new Furniture(1,"铅笔","pencil",R.drawable.ic_pencil, "一支铅笔",10,"gold"),
             new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")};
+
+    /**
+     * 监听按键，如果用户按下BACK键时直接退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -44,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     }
     /**
      * 这个类定义了MainActivity中的各个组件
-     *
+     * 初始化控件（包括工具栏控件、导航栏控件、活动栏控件）
+     * 设置侧边栏监听事件
      * @author : WenCong
      * @version : 1.0
      * @update : 2021/5/18 WenCong 发布初版
@@ -115,11 +123,22 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    /**
+     * 用户每次返回到主界面时将调用updateBackground函数刷新界面，
+     * 将用户的资产显示到主界面上
+     */
     @Override
     protected void onStart(){
         super.onStart();
         updateBackground();
     }
+
+    /**
+     * 初始化侧边栏点击按钮
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -174,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * 将饰品位置加载图片
      * @param index
      */
     private void loadProperty(int index){

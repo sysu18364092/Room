@@ -33,6 +33,12 @@ public class WeakPointActivity extends AppCompatActivity {
     private Button mBtnDelete ;
     public final static String WeakPointURL = "http://39.108.187.44/question_request.php";
     static boolean wait ;
+
+    /**
+     * 初始化控件，
+     * 并设置监听事件
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

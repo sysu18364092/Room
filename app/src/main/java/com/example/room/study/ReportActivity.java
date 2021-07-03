@@ -40,7 +40,14 @@ public class ReportActivity extends AppCompatActivity {
     private Button mBtnBackMain ;
     public final static String SavePath = "/data/data/com.example.room/files/";
     public final static String UploadURL = "http://39.108.187.44/upload_record_file.php";
-    public final static String GetScoreURL = "http://39.108.187.44/scoreboard.php";
+    public final static String ScoreURL = "http://39.108.187.44/scoreboard.php";
+
+    /**
+     * 监听按键，如果用户按下BACK键时直接退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -49,6 +56,12 @@ public class ReportActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    /**
+     * 初始化控件
+     * 设置监听事件
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +115,9 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * 输入为学习时间以及是否通关章节，
+     * 结算学习奖励，
+     * 并调用sendStudyReportWithOkHttp函数将输入发送给服务器
      * @param studyTime
      * @param passChapter
      */
@@ -112,6 +127,13 @@ public class ReportActivity extends AppCompatActivity {
 
         sendStudyReportWithOkHttp(timeScore,passScore);
     }
+
+    /**
+     * 输入为学习时间积分以及通关积分，
+     * 发送学习记录给服务器
+     * @param timeScore
+     * @param passScore
+     */
     private void sendStudyReportWithOkHttp(int timeScore,int passScore){
         new Thread(new Runnable() {
             @Override
@@ -127,7 +149,7 @@ public class ReportActivity extends AppCompatActivity {
                             .build();
 
                     Request request = new Request.Builder()
-                            .url(GetScoreURL)
+                            .url(ScoreURL)
                             .post(requestBody)
                             .build();
                     Response response = client.newCall(request).execute();
@@ -141,6 +163,15 @@ public class ReportActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    /**
+     * 输入为服务器返回的JSON文件以及学习时间积分以及通关积分，
+     * 如果服务器返回成功，
+     * 则将积分写入到资产文件中
+     * @param jsonData
+     * @param timeScore
+     * @param passScore
+     */
     private void parseJSONWithJSONObject(String jsonData,int timeScore,int passScore){
         try {
             JSONObject jsonObject = new JSONObject(jsonData) ;
@@ -159,6 +190,10 @@ public class ReportActivity extends AppCompatActivity {
 
         }
     }
+
+    /**
+     * 将最新的学习记录提交到服务器端
+     */
     private void uploadStudyRecord(){
         new Thread(new Runnable() {
             @Override

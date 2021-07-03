@@ -47,6 +47,12 @@ public class ShopActivity extends AppCompatActivity {
     private int scorePass ;
     private int[] furnitureOnSale ;
     public final static String ShopURL = "http://39.108.187.44/purchase.php";
+
+    /**
+     * 初始化控件（包括商店界面的卡片式布局控件）
+     * 设置按钮监听事件
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

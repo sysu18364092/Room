@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     public final static int QuestionBankSize = 10;
     public final static String SavePath = "/data/data/com.example.room/files/";
     public final static String DownloadURL = "http://39.108.187.44/user/record/";
-    public final static String LoginURL = "http://39.108.187.44/login.php";
+    public final static String LoginURL = "http://39.108.187.44/user_management.php";
 
 
     /**
@@ -87,6 +87,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 监听按键，如果用户按下BACK键时直接退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -173,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
                     RequestBody requestBody = new FormBody.Builder()
                             .add("username",strUsername)
                             .add("password",strPassword)
-                            .add("submit","login")
+                            .add("type","login")
                             .build();
 
                     Request request = new Request.Builder()

@@ -34,6 +34,12 @@ public class StudyActivity extends AppCompatActivity {
             new Chapter("第十一章 几何应用",11),
             new Chapter("第十二章 多元积分学及其应用",12),
     };
+
+    /**
+     * 初始化控件（包括章节选择界面的RecycleView控件）
+     * 设置监听事件
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,9 @@ public class StudyActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 将chapter数组添加到chapterList中
+     */
     private void initChapter(){
         for (int i=0;i<chapters.length;++i) chapterList.add(chapters[i]);
     }

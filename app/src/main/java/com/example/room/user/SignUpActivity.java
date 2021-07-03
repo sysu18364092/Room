@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText mEtSignUpPasswordConfirm;
     private EditText mEtSignUpMail;
     private Button mBtnSignUp;
-    public final static String SignUpURL = "http://39.108.187.44/login.php";
+    public final static String SignUpURL = "http://39.108.187.44/user_management.php";
     /**
      * 这个类定义了SignUpActivity中的各个组件
      *
@@ -124,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
                             .add("username",strSignUpUsername)
                             .add("password",strSignUpPassword)
                             .add("email",strSignUpMail)
-                            .add("submit","signup")
+                            .add("type","signup")
                             .build();
 
                     Request request = new Request.Builder()
