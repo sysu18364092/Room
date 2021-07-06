@@ -81,10 +81,30 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
             return;
         }
-
+        else if(strSignUpUsername.length()<5) {
+            String warningText = "用户名必须大于5个字符";
+            Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        boolean validUsername = checkInvalidChar(strSignUpUsername);
+        if(!validUsername){
+            String warningText = "用户名中包含非法字符";
+            Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
+            return;
+        }
         //密码
         if(strSignUpPassword.isEmpty()){
             String warningText = "密码不能为空";
+            Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(strSignUpPassword.length()>20) {
+            String warningText = "密码必须在20个字符以内";
+            Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(strSignUpPassword.length()<6) {
+            String warningText = "密码必须大于6个字符";
             Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
             return;
         }
@@ -93,7 +113,13 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
             return;
         }
-
+        boolean validPassword = checkInvalidChar(strSignUpPassword);
+        if(!validPassword){
+            String warningText = "密码中包含非法字符";
+            Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //邮箱
         if(strSignUpMail.isEmpty()){
             String warningText = "邮箱不能为空";
             Toast.makeText(SignUpActivity.this,warningText,Toast.LENGTH_SHORT).show();
@@ -162,7 +188,11 @@ public class SignUpActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else if (success.equals("0")){
-                Toast.makeText(SignUpActivity.this,"用户名已存在", Toast.LENGTH_SHORT).show();
+                if(message.equals("Unvalid email Address")){
+                    Toast.makeText(SignUpActivity.this,"无效邮箱", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(SignUpActivity.this,"用户名已存在", Toast.LENGTH_SHORT).show();
             }
             Looper.loop();
         }catch (Exception e){
@@ -170,6 +200,21 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    private boolean checkInvalidChar(String checkStr){
+        boolean result = true ;
+        int strLen = checkStr.length();
+        for(int i=0;i<strLen;++i){
+            char ch = checkStr.charAt(i) ;
+            if (((ch>47)&&(ch<58))||((ch>64)&&(ch<91))||(ch>96)&&(ch<122)){
+
+            }
+            else{
+                result = false ;
+                break;
+            }
+        }
+        return result;
+    }
 
 
 

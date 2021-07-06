@@ -33,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private Furniture[] furnitures = {
             new Furniture(0,"书本","book",R.drawable.ic_book, "一本书",20,"gold"),
             new Furniture(1,"铅笔","pencil",R.drawable.ic_pencil, "一支铅笔",10,"gold"),
-            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")};
+            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")
+
+    };
 
     /**
      * 监听按键，如果用户按下BACK键时直接退出程序

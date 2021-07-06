@@ -38,7 +38,7 @@ public class ReportActivity extends AppCompatActivity {
     private TextView mTvGetTimeScore ;
     private TextView mTvGetPassScore;
     private Button mBtnBackMain ;
-    public final static String SavePath = "/data/data/com.example.room/files/";
+    public final static String SavePath = "/data/data/com.example.room/";
     public final static String UploadURL = "http://39.108.187.44/upload_record_file.php";
     public final static String ScoreURL = "http://39.108.187.44/scoreboard.php";
 

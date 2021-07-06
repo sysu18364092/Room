@@ -60,14 +60,14 @@ public class StudyActivity extends AppCompatActivity {
                     editor.commit();
                     SharedPreferences pref = getSharedPreferences("study_state",MODE_PRIVATE);
                     int mode = pref.getInt("Mode",0);
+                    Intent intent;
                     if (mode==0){
-                        Intent intent = new Intent(StudyActivity.this,TestActivity.class);
-                        startActivity(intent);
+                        intent = new Intent(StudyActivity.this, TestActivity.class);
                     }
                     else {
-                        Intent intent = new Intent(StudyActivity.this, WeakPointActivity.class);
-                        startActivity(intent);
+                        intent = new Intent(StudyActivity.this, WeakPointActivity.class);
                     }
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(StudyActivity.this,"后续章节正在开发中",Toast.LENGTH_SHORT).show();

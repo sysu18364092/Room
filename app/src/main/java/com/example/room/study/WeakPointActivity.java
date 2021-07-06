@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -80,14 +81,9 @@ public class WeakPointActivity extends AppCompatActivity {
      */
     private void startReview(){
         getWeakPointWithOkHttp();
-        if (!wait){
-            check();
-            sendNextWeakPointMessageWithOkHttp();
-            showWeakPoint();
-        }
-        else {
-            Toast.makeText(WeakPointActivity.this,"加载中",Toast.LENGTH_SHORT).show();
-        }
+        check();
+        sendNextWeakPointMessageWithOkHttp();
+        showWeakPoint();
     }
 
     /**
@@ -120,7 +116,7 @@ public class WeakPointActivity extends AppCompatActivity {
                     // 解析返回json文件获取Qid
                     parseWeakPointQId(responseData);
                 }catch (Exception e){
-                    e.printStackTrace();
+                    wait = false ;
                 }
             }
         }).start();
@@ -147,8 +143,13 @@ public class WeakPointActivity extends AppCompatActivity {
             }
             editor.commit();
             wait = false ;
+            Looper.prepare();
+            check();
+//            sendNextWeakPointMessageWithOkHttp();
+//            showWeakPoint();
+            Looper.loop();
         }catch (Exception e){
-            e.printStackTrace();
+            wait = false ;
         }
     }
 

@@ -8,6 +8,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,7 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button mBtnLogin ;
     private TextView mTvSignUp ;
     public final static int QuestionBankSize = 10;
-    public final static String SavePath = "/data/data/com.example.room/files/";
+//    public final static String SavePath = "/data/data/com.example.room/files/";
+    public final static String SavePath = "/data/data/com.example.room/";
     public final static String DownloadURL = "http://39.108.187.44/user/record/";
     public final static String LoginURL = "http://39.108.187.44/user_management.php";
 
@@ -213,9 +215,9 @@ public class LoginActivity extends AppCompatActivity {
             int OnlineRecord = jsonObject.getInt("online_record");
             JSONArray jsonArray = new JSONArray(jsonObject.getString("Ostates"));
             JSONArray finishChapter = new JSONArray(jsonObject.getString("Fin"));
-            //Looper.prepare();
+            Looper.prepare();
             if(success.equals("1")) {
-                //Toast.makeText(LoginActivity.this, "登陆成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "登陆成功",Toast.LENGTH_SHORT).show();
                 String url = DownloadURL+strUsername+".txt";
                 String fileSavePath = SavePath+strUsername+".txt" ;
                 SharedPreferences.Editor editor = getSharedPreferences("login_state",MODE_PRIVATE).edit();
@@ -244,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                     DownloadUtil.getDownloadUtil().download(url, SavePath, new DownloadUtil.OnDownloadListener() {
                         @Override
                         public void onDownloadSuccess() {
-                            Log.d("LoginActivity","Success");
+                            Log.d("LoginActivity","load Success");
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -264,10 +266,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else{
-                //Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
             }
 
-            //Looper.loop();
+            Looper.loop();
         }catch (Exception e){
             e.printStackTrace();
         }
