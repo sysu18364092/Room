@@ -40,7 +40,12 @@ public class ShopActivity extends AppCompatActivity {
     private Furniture[] furnitures = {
             new Furniture(0,"书本","book",R.drawable.ic_book, "一本书",20,"gold"),
             new Furniture(1,"铅笔","pencil",R.drawable.ic_pencil, "一支铅笔",10,"gold"),
-            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")};
+            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold"),
+            new Furniture(3,"手表","watch",R.drawable.ic_watch,"一只手表",50,"gold"),
+            new Furniture(4,"杯子","cup",R.drawable.ic_cup,"一个杯子",15,"gold"),
+            new Furniture(5,"盆栽","plant",R.drawable.ic_plant,"仙人掌盆栽",30,"gold"),
+            new Furniture(6,"U盘","udisk",R.drawable.ic_udisk,"有许多学习资料的U盘",25,"gold")
+            };
     private List<Furniture> furnitureList = new ArrayList<>();
     private FurnitureAdapter adapter ;
     private int scoreTime ;

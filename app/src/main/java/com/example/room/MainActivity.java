@@ -29,12 +29,19 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mIvPencil;
     private ImageView mIvEraser;
     private ImageView mIvBook;
+    private ImageView mIvWatch;
+    private ImageView mIvCup;
+    private ImageView mIvPlant;
+    private ImageView mIvUdsik;
     private DrawerLayout mDrawerLayout ;
     private Furniture[] furnitures = {
             new Furniture(0,"书本","book",R.drawable.ic_book, "一本书",20,"gold"),
             new Furniture(1,"铅笔","pencil",R.drawable.ic_pencil, "一支铅笔",10,"gold"),
-            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold")
-
+            new Furniture(2,"橡皮擦","eraser",R.drawable.ic_earser,"一个橡皮擦",8,"gold"),
+            new Furniture(3,"手表","watch",R.drawable.ic_watch,"一只手表",50,"gold"),
+            new Furniture(4,"杯子","cup",R.drawable.ic_cup,"一个杯子",15,"gold"),
+            new Furniture(5,"盆栽","plant",R.drawable.ic_plant,"仙人掌盆栽",30,"gold"),
+            new Furniture(6,"U盘","udisk",R.drawable.ic_udisk,"有许多学习资料的U盘",25,"gold")
     };
 
     /**
@@ -66,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
         mIvPencil = findViewById(R.id.iv_pencil);
         mIvEraser = findViewById(R.id.iv_eraser);
         mIvBook = findViewById(R.id.iv_book);
+        mIvWatch = findViewById(R.id.iv_watch);
+        mIvCup = findViewById(R.id.iv_cup);
+        mIvPlant = findViewById(R.id.iv_plant);
+        mIvUdsik = findViewById(R.id.iv_udisk);
         updateBackground();
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -208,6 +219,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 mIvEraser.setImageResource(furnitures[2].getImageId());
+                break;
+            case 3:
+                mIvWatch.setImageResource(furnitures[3].getImageId());
+                break;
+            case 4:
+                mIvCup.setImageResource(furnitures[4].getImageId());
+                break;
+            case 5:
+                mIvPlant.setImageResource(furnitures[5].getImageId());
+                break;
+            case 6:
+                mIvUdsik.setImageResource(furnitures[6].getImageId());
                 break;
         }
     }

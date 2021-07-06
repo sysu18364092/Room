@@ -191,8 +191,8 @@ public class LoginActivity extends AppCompatActivity {
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
                     //解析返回的json文件
-                    parseJSONWithJSONObject(responseData,strUsername);
                     Log.d("LoginActivity",responseData);
+                    parseJSONWithJSONObject(responseData,strUsername);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -210,13 +210,15 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("LoginActivity","get "+jsonData);
             String success = jsonObject.getString("success");
             String message = jsonObject.getString("message");
-            int scoreTime = jsonObject.getInt("TimerScore");
-            int scorePass = jsonObject.getInt("PassScore");
-            int OnlineRecord = jsonObject.getInt("online_record");
-            JSONArray jsonArray = new JSONArray(jsonObject.getString("Ostates"));
-            JSONArray finishChapter = new JSONArray(jsonObject.getString("Fin"));
+            Log.d("LoginActivity","Get"+success);
             Looper.prepare();
+//            Log.d("LoginActivity","Get"+success);
             if(success.equals("1")) {
+                int scoreTime = jsonObject.getInt("TimerScore");
+                int scorePass = jsonObject.getInt("PassScore");
+                int OnlineRecord = jsonObject.getInt("online_record");
+                JSONArray jsonArray = new JSONArray(jsonObject.getString("Ostates"));
+                JSONArray finishChapter = new JSONArray(jsonObject.getString("Fin"));
                 Toast.makeText(LoginActivity.this, "登陆成功",Toast.LENGTH_SHORT).show();
                 String url = DownloadURL+strUsername+".txt";
                 String fileSavePath = SavePath+strUsername+".txt" ;
@@ -266,6 +268,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
             else{
+                Log.d("LoginActivity","登录失败");
                 Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
             }
 
