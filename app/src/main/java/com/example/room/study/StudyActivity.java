@@ -53,7 +53,7 @@ public class StudyActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new ChapterAdapter.OnItemClickListener(){
             @Override
             public void onItemClick(View view, int position){
-                if (position==0){
+                if (position<6){
                     SharedPreferences.Editor editor = getSharedPreferences("study_state",MODE_PRIVATE).edit() ;
                     editor.putInt("chapter",chapters[position].getChapter());
                     editor.putInt("questionDone",0);

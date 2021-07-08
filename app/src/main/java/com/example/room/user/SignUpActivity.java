@@ -205,10 +205,11 @@ public class SignUpActivity extends AppCompatActivity {
         int strLen = checkStr.length();
         for(int i=0;i<strLen;++i){
             char ch = checkStr.charAt(i) ;
-            if (((ch>47)&&(ch<58))||((ch>64)&&(ch<91))||(ch>96)&&(ch<122)){
+            if (((ch>47)&&(ch<58))||((ch>64)&&(ch<91))||(ch>96)&&(ch<123)){
 
             }
             else{
+                Log.d("SignUpActivity","wrong ch "+ ch);
                 result = false ;
                 break;
             }

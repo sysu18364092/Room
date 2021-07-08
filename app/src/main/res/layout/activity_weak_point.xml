@@ -26,14 +26,14 @@
             android:text="下一题"
             android:textSize="@dimen/font_22"
             android:background="@drawable/btn_login_selector"/>
-        <Button
-            android:id="@+id/btn_delete"
-            android:layout_marginLeft="@dimen/spacing_10"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="已掌握"
-            android:textSize="@dimen/font_22"
-            android:background="@drawable/btn_login_selector"/>
+<!--        <Button-->
+<!--            android:id="@+id/btn_delete"-->
+<!--            android:layout_marginLeft="@dimen/spacing_10"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="已掌握"-->
+<!--            android:textSize="@dimen/font_22"-->
+<!--            android:background="@drawable/btn_login_selector"/>-->
     </LinearLayout>
 </LinearLayout>

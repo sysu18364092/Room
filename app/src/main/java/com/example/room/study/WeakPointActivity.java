@@ -31,7 +31,7 @@ public class WeakPointActivity extends AppCompatActivity {
     private FlexibleRichTextView mFRTvWeakPointQuestion;
     private FlexibleRichTextView mFRTvWeakPointAnalysis;
     private Button mBtnNextWeakPoint ;
-    private Button mBtnDelete ;
+//    private Button mBtnDelete ;
     public final static String WeakPointURL = "http://39.108.187.44/question_request.php";
     static boolean wait ;
 
@@ -48,7 +48,7 @@ public class WeakPointActivity extends AppCompatActivity {
         mFRTvWeakPointQuestion = findViewById(R.id.fr_tv_weak_point_question);
         mFRTvWeakPointAnalysis = findViewById(R.id.fr_tv_weak_point_analysis);
         mBtnNextWeakPoint = findViewById(R.id.btn_next_weak_point);
-        mBtnDelete = findViewById(R.id.btn_delete);
+//        mBtnDelete = findViewById(R.id.btn_delete);
         wait = true ;
         startReview();
         mBtnNextWeakPoint.setOnClickListener(new NoMultiClickListener() {
@@ -64,12 +64,12 @@ public class WeakPointActivity extends AppCompatActivity {
                 }
             }
         });
-        mBtnDelete.setOnClickListener(new NoMultiClickListener() {
-            @Override
-            public void onNoMultiClick(View v) {
-                sendDeleteMessageWithOkHttp();
-            }
-        });
+//        mBtnDelete.setOnClickListener(new NoMultiClickListener() {
+//            @Override
+//            public void onNoMultiClick(View v) {
+//                sendDeleteMessageWithOkHttp();
+//            }
+//        });
     }
 
     /**
@@ -218,9 +218,9 @@ public class WeakPointActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    private void sendDeleteMessageWithOkHttp(){
-
-    }
+//    private void sendDeleteMessageWithOkHttp(){
+//
+//    }
 
     /**
      *  检查是否还有剩余薄弱点

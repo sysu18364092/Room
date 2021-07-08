@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEtPassword ;
     private Button mBtnLogin ;
     private TextView mTvSignUp ;
-    public final static int QuestionBankSize = 10;
+    public final static int QuestionBankSize = 100;
 //    public final static String SavePath = "/data/data/com.example.room/files/";
     public final static String SavePath = "/data/data/com.example.room/";
     public final static String DownloadURL = "http://39.108.187.44/user/record/";
